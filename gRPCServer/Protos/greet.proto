@@ -1,0 +1,33 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "Server";
+
+package greet;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc GetUserById (GetUserRequest) returns (User);
+  rpc GetArray (google.protobuf.Empty) returns (BigArray);
+  rpc GetBigObj (google.protobuf.Empty) returns (BigObject);
+}
+
+message User {
+    int32 id = 1;
+    string first_name = 2;
+    string last_name = 3;
+}
+
+message GetUserRequest {
+    int32 id = 1;
+}
+
+message BigArray {
+    repeated int32 array = 123;
+}
+
+message BigObject {
+    repeated string bigStr = 1;
+    repeated int32 array = 2;
+}
