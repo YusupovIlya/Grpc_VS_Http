@@ -2,22 +2,19 @@
 using Server;
 using Google.Protobuf.WellKnownTypes;
 using BenchmarkDotNet.Attributes;
-
-//const string host = "https://localhost:7139";
-//HttpClient httpClient = new HttpClient();
-//httpClient.GetAsync($"{host}/users/1");
+using BenchmarkDotNet.Running;
 
 //BenchmarkRunner.Run<TestsGRPC>();
 //BenchmarkRunner.Run<TestsREST>();
-const string host = "https://localhost:7200";
+const string host = "http://192.168.162.191:3000";
 Greeter.GreeterClient client = new Greeter.GreeterClient(GrpcChannel.ForAddress(host));
-var r = await client.GetArrayAsync(new Empty());
-Console.WriteLine(r.Array[0]);
+var response = await client.GetUserByIdAsync(new GetUserRequest { Id = 1 });
+Console.WriteLine($"User from gRPC server = {response.Id} {response.FirstName} {response.LastName}");
 
 [MemoryDiagnoser]
 public class TestsGRPC
 {
-    const string host = "https://localhost:7200";
+    const string host = "http://192.168.162.191:3000";
     Greeter.GreeterClient client = new Greeter.GreeterClient(GrpcChannel.ForAddress(host));
 
     [Benchmark]
@@ -42,7 +39,7 @@ public class TestsGRPC
 [MemoryDiagnoser]
 public class TestsREST
 {
-    const string host = "https://localhost:7187";
+    const string host = "http://192.168.162.191:3000";
     private HttpClient httpClient = new HttpClient();
 
     [Benchmark]
